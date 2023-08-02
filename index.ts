@@ -6,12 +6,12 @@ import userRoute from "./src/services/user"
 import courseRoute from "./src/services/courses"
 import cors from "cors"
 const server = express()
+server.use(cors())
 config()
 
 server.use("/user", userRoute)
 server.use("/courses", courseRoute)
 
-server.use(cors())
 
 const initAPI = async () => {
     try {
