@@ -11,9 +11,7 @@ config()
 server.use("/user", userRoute)
 server.use("/courses", courseRoute)
 
-server.use(cors({
-    origin: "http://localhost:5173"
-}))
+server.use(cors())
 
 const initAPI = async () => {
     try {
