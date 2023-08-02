@@ -70,7 +70,7 @@ userRoute.get(
     }
 )
 
-userRoute.patch("/:id/:courseId", async (req: Request, res: Response, next: NextFunction) => {
+userRoute.patch("/:id/:courseId", authMidd, async (req: Request, res: Response, next: NextFunction) => {
     try {
         const user = await User.findById(req.params.id).populate("favs")
         if ((user!.favs as Course[]).some((el: Course) => new ObjectId(el._id).equals(new ObjectId(req.params.courseId)))) {

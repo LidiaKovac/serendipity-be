@@ -2,10 +2,10 @@
   "name": "serendipity-be",
   "version": "1.0.0",
   "description": "backend for my serendipity concept",
-  "main": "./dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "ts-node-dev ./index.ts && node -r dotenv/config ./dist"
+    ,"start": "node -r dotenv/config ./dist"
   },
   "author": "",
   "license": "ISC",

@@ -28,7 +28,7 @@ export const authMidd = async (req: Request, res: Response, next: NextFunction) 
                 where: {
                     ...decoded
                 },
-                attributes: ["email", "full_name", "nickname", "id"]
+                attributes: ["email", "name", "lastName"]
 
             })
             if (me) {
