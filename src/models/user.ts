@@ -5,7 +5,8 @@ import Course from "./course"
 const userSchema = new mongoose.Schema<User>({
     email: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     password: {
         type: String,

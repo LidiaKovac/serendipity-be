@@ -4,7 +4,7 @@ interface User {
     name: string
     lastName: string
     id: import("mongoose").ObjectId
-    favs: import("mongoose").ObjectId[] | Course[]
+    favs: import("mongodb").ObjectId[] | Course[]
 }
 
 declare namespace Express {
@@ -27,7 +27,7 @@ interface JwtPayload {
 }
 
 interface Course {
-    _id: import("bson").ObjectId
+    _id: import("mongodb").ObjectId
     title: string 
     duration: number 
     level: number 
