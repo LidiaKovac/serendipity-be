@@ -4,8 +4,8 @@
   "description": "backend for my serendipity concept",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "ts-node-dev ./index.ts && node -r dotenv/config ./dist",
-    "start": "node -r dotenv/config ./dist",
+    "dev": "ts-node-dev ./index.ts && node ./dist",
+    "start": "node ./dist",
     "build": "tsc"
   },
   "author": "",
