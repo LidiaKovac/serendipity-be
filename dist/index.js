@@ -7,8 +7,12 @@ const express_1 = __importDefault(require("express"));
 const dotenv_1 = require("dotenv");
 const mongoose_1 = __importDefault(require("mongoose"));
 const express_list_endpoints_1 = __importDefault(require("express-list-endpoints"));
+const user_1 = __importDefault(require("./src/services/user"));
+const courses_1 = __importDefault(require("./src/services/courses"));
 const server = (0, express_1.default)();
 (0, dotenv_1.config)();
+server.use("/user", user_1.default);
+server.use("/courses", courses_1.default);
 const initAPI = async () => {
     try {
         await mongoose_1.default.connect(process.env.MONGO_URI);
