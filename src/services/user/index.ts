@@ -103,7 +103,7 @@ userRoute.post(
     ]),
     async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
-            if (req.body.password !== req.body.password_confirm)
+            if (req.body.password !== req.body.passwordConfirm)
                 res.status(400).send("Passwords don't match!")
             const checkUnique = await User.findOne({
                 where: {
