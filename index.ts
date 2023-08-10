@@ -3,13 +3,14 @@ import { config } from "dotenv"
 import mongoose from "mongoose"
 import listEndpoints from "express-list-endpoints"
 import userRoute from "./src/services/user"
+import courseRoute from "./src/services/courses"
 import cors from "cors"
 const server = express()
-server.use(express.json())
 server.use(cors())
 config()
 
 server.use("/user", userRoute)
+server.use("/courses", courseRoute)
 
 
 const initAPI = async () => {
