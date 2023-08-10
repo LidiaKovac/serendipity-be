@@ -3,7 +3,7 @@ import { Router } from "express"
 const userRoute = Router()
 import { Request, Response, NextFunction } from "express"
 // import { validateCharacter } from "../../validation/char";
-import { compare } from "bcryptjs"
+import { compare, hash } from "bcryptjs"
 import User from "../../models/user"
 import { authMidd, generateJWT } from "../../utils/auth"
 import multer from "multer"
@@ -50,24 +50,27 @@ userRoute.get(
 
 userRoute.post(
     "/login",
-    multer().fields([{ name: "email" }, { name: "password" }]),
     async ({ body }: Request, res: Response, next: NextFunction) => {
         try {
             let foundUser = await User.findOne({
-                
                 email: body.email,
             })
             const matching = await compare(body.password, foundUser!.password)
             console.log(matching)
-            if (foundUser && matching) {
+            if(!matching) {
+                res.status(404).send("Passwords don't match") 
+               return 0
+            }
+            if (foundUser) {
                 const token = await generateJWT({
                     lastName: foundUser!.lastName,
                     email: foundUser!.email,
                 })
                 res
-                    .set("Access-Control-Expose-Headers", "token")
-                    .set("token", token as string)
-                    .sendStatus(200)
+                    .send({
+                        user: foundUser,
+                        accessToken: token
+                    })
             } else res.sendStatus(404)
         } catch (error) {
             next(error)
@@ -88,23 +91,14 @@ userRoute.get(
 )
 
 userRoute.patch(
-    "/favs/:courseId",
-    authMidd,
+    "/:id",
     async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const user = await User.findOne({ email: req.user.email })
-            if (
-                user!.favs.some((el) =>
-                    new ObjectId(el as ObjectId).equals(new ObjectId(req.params.courseId))
-                )
-            ) {
-                user!.favs = (user?.favs as Course[]).filter((fav: Course) => !new ObjectId(fav._id).equals(new ObjectId(req.params.courseId)))
-            } else {
-                console.log("adding")
-                user!.favs = [...user?.favs as ObjectId[], new ObjectId(req.params.courseId) ]
-            }
+            let user = await User.findByIdAndUpdate(req.params.id, {
+                favs: req.body.favs
+            }, {new: true})
             await user?.save()
-            res.sendStatus(204)
+            res.send(user)
         } catch (error) {
             console.log(error)
             next()
@@ -114,16 +108,11 @@ userRoute.patch(
 
 userRoute.post(
     "/",
-    multer().fields([
-        { name: "name" },
-        { name: "email" },
-        { name: "password" },
-        { name: "passwordConfirm" },
-    ]),
     async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
-            if (req.body.password !== req.body.passwordConfirm)
-                res.status(400).send("Passwords don't match!")
+            console.log(req.body)
+            // if (req.body.password !== req.body.passwordConfirm)
+            //     res.status(400).send("Passwords don't match!")
             const checkUnique = await User.findOne({
                 where: {
                     email: req.body.email,
@@ -132,10 +121,12 @@ userRoute.post(
             if (checkUnique) {
                 res.status(400).send("Email is already in our system!")
             }
-            await User.create({
+            const password = await hash(req.body.password, process.env.SALT!)
+            const newUser = await User.create({
                 ...req.body,
+                password
             })
-            res.status(201).send("User created")
+            res.status(201).send(newUser)
         } catch (e) {
             next(e)
         }

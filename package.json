@@ -1,7 +1,7 @@
 {
-  "name": "serendipity-be",
+  "name": "remove-json-server",
   "version": "1.0.0",
-  "description": "backend for my serendipity concept",
+  "description": "backend for all my json-server projects",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "ts-node-dev ./index.ts && node ./dist",
