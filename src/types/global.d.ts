@@ -4,7 +4,7 @@ interface User {
     name: string
     lastName: string
     id: import("mongoose").ObjectId
-    favs: import("mongodb").ObjectId[] | Course[]
+    favs: string[]
 }
 
 declare namespace Express {

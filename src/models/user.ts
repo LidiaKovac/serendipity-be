@@ -1,6 +1,5 @@
 import { hash } from "bcryptjs"
 import mongoose from "mongoose"
-import Course from "./course"
 
 const userSchema = new mongoose.Schema<User>({
     email: {
@@ -20,7 +19,7 @@ const userSchema = new mongoose.Schema<User>({
         type: String,
         required: true
     },
-    favs: [{ type: mongoose.Schema.Types.ObjectId, ref: Course }]
+    favs: [String]
 
 }, { collection: "user" })
 

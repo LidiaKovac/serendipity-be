@@ -88,21 +88,12 @@ userRoute.get(
 )
 
 userRoute.patch(
-    "/favs/:courseId",
+    "/favs/:cityName",
     authMidd,
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             const user = await User.findOne({ email: req.user.email })
-            if (
-                user!.favs.some((el) =>
-                    new ObjectId(el as ObjectId).equals(new ObjectId(req.params.courseId))
-                )
-            ) {
-                user!.favs = (user?.favs as Course[]).filter((fav: Course) => !new ObjectId(fav._id).equals(new ObjectId(req.params.courseId)))
-            } else {
-                console.log("adding")
-                user!.favs = [...user?.favs as ObjectId[], new ObjectId(req.params.courseId) ]
-            }
+            user!.favs.push(req.params.cityName)
             await user?.save()
             res.sendStatus(204)
         } catch (error) {
@@ -156,6 +147,7 @@ userRoute.put(
     "/:id",
     async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
+
         } catch (e) {
             next(e)
         }
