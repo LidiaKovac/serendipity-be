@@ -95,7 +95,7 @@ userRoute.patch(
             const user = await User.findOne({ email: req.user.email })
             user!.favs.push(req.params.cityName)
             await user?.save()
-            res.sendStatus(204)
+            res.send(user)
         } catch (error) {
             console.log(error)
             next()
