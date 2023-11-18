@@ -88,12 +88,30 @@ userRoute.get(
 )
 
 userRoute.patch(
-    "/favs/:cityName",
+    "/favs/:cityName/add",
     authMidd,
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             const user = await User.findOne({ email: req.user.email })
-            user!.favs.push(req.params.cityName)
+            if(user && !user.favs.includes(req.params.cityName)) {
+                user.favs.push(req.params.cityName)
+                await user?.save()
+            }
+            res.send(user)
+        } catch (error) {
+            console.log(error)
+            next()
+        }
+    }
+)
+
+userRoute.patch(
+    "/favs/:cityName/remove",
+    authMidd,
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const user = await User.findOne({ email: req.user.email })
+            user!.favs = user!.favs.filter(fav => fav !== req.params.cityName)
             await user?.save()
             res.send(user)
         } catch (error) {
