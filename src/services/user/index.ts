@@ -2,7 +2,6 @@
 import { Router } from "express"
 const userRoute = Router()
 import { Request, Response, NextFunction } from "express"
-// import { validateCharacter } from "../../validation/char";
 import { compare } from "bcryptjs"
 import User from "../../models/user"
 import { authMidd, generateJWT } from "../../utils/auth"
@@ -54,11 +53,9 @@ userRoute.post(
     async ({ body }: Request, res: Response, next: NextFunction) => {
         try {
             let foundUser = await User.findOne({
-                
                 email: body.email,
             })
             const matching = await compare(body.password, foundUser!.password)
-            console.log(matching)
             if (foundUser && matching) {
                 const token = await generateJWT({
                     lastName: foundUser!.lastName,

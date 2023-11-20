@@ -17,7 +17,7 @@ const initAPI = async () => {
     try {
         await mongoose.connect(process.env.MONGO_URI!)
         console.log("DB CONNECTED!")
-        server.listen(process.env.PORT || 3000, () => {
+        server.listen(process.env.PORT || 3001, () => {
             console.table(listEndpoints(server))
         })
     } catch (error) {
